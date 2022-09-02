@@ -1,20 +1,3 @@
-/*
- * Copyright (C) 2022 Can-lab Corporation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
-*/
-
 /**********************************************************************
   This is the ClpeClientApi Class Function of CanLab CLPE Client API. 
 **********************************************************************/
@@ -253,6 +236,7 @@ int ClpeClientApi::Clpe_Connection(string password)
 
 	string cmdModule = "echo '" + password + "' | sudo -kS modprobe tegra_vnet > /dev/null 2>&1";
 
+
 	string cmdNet1 = "echo '" + password + "' | sudo -kS sysctl -w net.ipv4.ip_forward=1 > /dev/null 2>&1";
 	string cmdNet2 = "echo '" + password + "' | sudo -kS sysctl -w net.core.rmem_default=90000000 > /dev/null 2>&1";
 	string cmdNet3 = "echo '" + password + "' | sudo -kS sysctl -w net.core.rmem_max=90000000 > /dev/null 2>&1";
@@ -396,21 +380,30 @@ int ClpeClientApi::Clpe_Connection()
 	int errConnect = 0;
 	//int masterCheckedPosition = 0;
 	int isAttachedSlave = 0;
+
 	//string cmdModule = "echo '" + password + "' | sudo -kS modprobe tegra_vnet > /dev/null 2>&1";
+
+
 	//string cmdNet1 = "echo '" + password + "' | sudo -kS sysctl -w net.ipv4.ip_forward=1 > /dev/null 2>&1";
 	//string cmdNet2 = "echo '" + password + "' | sudo -kS sysctl -w net.core.rmem_default=90000000 > /dev/null 2>&1";
 	//string cmdNet3 = "echo '" + password + "' | sudo -kS sysctl -w net.core.rmem_max=90000000 > /dev/null 2>&1";
 	//string cmdNet4 = "echo '" + password + "' | sudo -kS sysctl -w net.ipv4.udp_rmem_min=10000000 > /dev/null 2>&1";
 	//string cmdNet5 = "echo '" + password + "' | sudo -kS sysctl -w net.ipv4.udp_mem='90000000 90000000 90000000' > /dev/null 2>&1";
+
 	isAttachedSlave = 0; // only support 1 clpe.
 	m_isAttachedSlave = isAttachedSlave;
 	/** tegra_vnet module probe **/
+
+	
 	//ret = system(cmdModule.c_str());
+
 	//if (ret != 0)
 	//{
 	//	return ERROR_CONNECT_DRIVER;
 	//}
+
 	//usleep(500000);
+
 	///* Check the connection for master */
 	//masterCheckedPosition = 0;
 	//ret = Clpe_CheckConnect(password, 0);
@@ -424,6 +417,7 @@ int ClpeClientApi::Clpe_Connection()
 	//	}
 	//}
 	//
+
 	//if (isAttachedSlave == 1)
 	//{
 	//	/* Check the connection for slave */
@@ -444,16 +438,19 @@ int ClpeClientApi::Clpe_Connection()
 	//		}
 	//	}
 	//}
+
 	cnt = 0;
 	int errPing = 0;
 	string cmdPing;
 	string xavierNxIpAddress;
 	xavierNxIpAddress = "192.168.7.7";
 	cmdPing = "ping -c 1 " + xavierNxIpAddress + " -W 1 > /dev/null 2>&1";
+
 	while (1)
 	{
 		/** ping **/
 		ret = system(cmdPing.c_str());
+
 		if (ret == 0)
 		{
 			errPing = 0;
@@ -464,22 +461,28 @@ int ClpeClientApi::Clpe_Connection()
 		{
 			cnt++;
 		}
+
 		if (cnt > 3)
 		{
 			errPing = 1;
 			cnt = 0;
 			break;
 		}
+
 		sleep(1);
 	}
+
 	if (errPing)
 	{
 		return ERROR_CONNECT_PING;
 	}
+
+
 	if (!ClpeSocket::create(MCU_ID_MASTER))
 	{
 		return ERROR_CONNECT_CREATE;
 	}
+
 	//if (isAttachedSlave == 1)
 	//{
 	//	if (!ClpeSocket::create(MCU_ID_SLAVE))
@@ -487,6 +490,7 @@ int ClpeClientApi::Clpe_Connection()
 	//		return ERROR_CONNECT_CREATE;
 	//	}
 	//}
+
 	cnt = 0;
 	while (1)
 	{
@@ -501,18 +505,22 @@ int ClpeClientApi::Clpe_Connection()
 			cnt = 0;
 			break;
 		}
+
 		if (cnt > 3)
 		{
 			errConnect = 1;
 			cnt = 0;
 			break;
 		}
+
 		sleep(1);
 	}
+
 	if (errConnect)
 	{
 		return ERROR_CONNECT_CONNECT;
 	}
+
 	if (isAttachedSlave == 1)
 	{
 		while (1)
@@ -528,25 +536,30 @@ int ClpeClientApi::Clpe_Connection()
 				cnt = 0;
 				break;
 			}
+
 			if (cnt > 3)
 			{
 				errConnect = 1;
 				cnt = 0;
 				break;
 			}
+
 			sleep(1);
 		}
+
 		if (errConnect)
 		{
 			return ERROR_CONNECT_CONNECT;
 		}
 	}
+
 	///** network memory setting **/
 	//system(cmdNet1.c_str());
 	//system(cmdNet2.c_str());
 	//system(cmdNet3.c_str());
 	//system(cmdNet4.c_str());
 	//system(cmdNet5.c_str());
+
 	return SUCCESSED;
 }
 
@@ -1399,118 +1412,6 @@ int ClpeClientApi::Clpe_GetCamStatus(int* status)
 		}
 		DataSum = 0;
 	}
-	free(socketTx);
-	free(socketRx);
-
-	return returnVal;
-}
-
-/********************************************************
-	  * Clpe_GetEepromData
-	  - Get the datas from eeprom in camera.
-*********************************************************/
-int ClpeClientApi::Clpe_GetEepromData(int camId, unsigned char* eepromData)
-{
-	unsigned char *socketTx = (unsigned char*) malloc(SOCKET_CMD_TX_PACKET_SIZE_MAX);
-	unsigned char *socketRx = (unsigned char*) malloc(SOCKET_CMD_RX_PACKET_SIZE_MAX);
-
-	unsigned int checkSumTx = 0;
-	unsigned int checkSumRx = 0;
-	unsigned int checkSumRxData = 0;
-	unsigned int DataSum = 0;
-
-	bool ret = false;
-
-	int returnVal = 0;
-	int cpu_id = MCU_ID_MASTER;
-	
-	if(m_isAttachedSlave == 1)
-	{
-		if(camId < 0 || camId > 7)
-		{
-			free(socketTx);
-			free(socketRx);
-			return ERROR_INVALID_CAM_ID;
-		}
-		if(camId >= 4 && camId <= 8)
-		{
-			cpu_id = MCU_ID_SLAVE;
-		}
-		else
-		{
-			cpu_id = MCU_ID_MASTER;
-		}
-	}
-	else
-	{
-		if(camId < 0 || camId > 3)
-		{
-			free(socketTx);
-			free(socketRx);
-			return ERROR_INVALID_CAM_ID;
-		}
-		else
-		{
-			cpu_id = MCU_ID_MASTER;
-		}
-	}
-
-	socketTx[0] = SOCKET_PACKET_ID_PC_TO_XAVIER;
-	socketTx[1] = CMD_ID_GET_EEPROM_DATA;
-	socketTx[2] = 0x01;
-	socketTx[3] = (unsigned char)camId;
-	checkSumTx = socketTx[0] + socketTx[1] + socketTx[2] + socketTx[3];
-	socketTx[4] = (unsigned char)((checkSumTx & 0x0000FF00) >> 8);
-	socketTx[5] = (unsigned char)(checkSumTx & 0x000000FF);
-
-	ret = Clpe_Send(socketTx, cpu_id);
-	if(!ret)
-	{
-		free(socketTx);
-		free(socketRx);
-		return ERROR_GETSET_COMMUNICATION;
-	}
-	ret = Clpe_Recv(socketRx, cpu_id);
-	if(!ret)
-	{
-		free(socketTx);
-		free(socketRx);
-		return ERROR_GETSET_COMMUNICATION;
-	}
-
-	for(int i = 0; i < SOCKET_CMD_RX_PAYLOAD_SIZE_MAX; i++)
-	{
-		DataSum += socketRx[3+i];
-	}
-
-	checkSumRx = socketRx[0] + socketRx[1] + socketRx[2] + DataSum;
-
-	checkSumRxData = (unsigned int)(socketRx[(SOCKET_CMD_RX_PACKET_SIZE_MAX-2)] << 8 | socketRx[(SOCKET_CMD_RX_PACKET_SIZE_MAX-1)]);
-
-	if(checkSumRx == checkSumRxData)
-	{
-		if(socketRx[3] == 0)
-		{
-			for(int i = 0; i < (SOCKET_CMD_RX_PAYLOAD_SIZE_MAX-1); i++)
-			{ 
-				eepromData[i] = socketRx[4+i];
-			}
-			returnVal = SUCCESSED;
-		}
-		if(socketRx[3] == 1)
-		{
-			returnVal = ERROR_GETSET_COMMAND;
-		}
-		if(socketRx[3] == 3)
-		{
-			returnVal = ERROR_GETSET_COMMUNICATION;
-		}
-	}
-	else
-	{
-		returnVal = ERROR_GETSET_CHECKSUM;
-	}
-
 	free(socketTx);
 	free(socketRx);
 
