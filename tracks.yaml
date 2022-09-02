@@ -17,11 +17,11 @@ tracks:
     devel_branch: null
     last_release: ros2-0.1.0
     last_version: 0.1.0
-    name: clpe_Sdk
+    name: clpe_sdk
     patches: null
     release_inc: '7'
     release_repo_url: https://github.com/canlab-co/CLPE_G_NVP2650D_SDK-ros2-release.git
-    release_tag: ros2-0.1.0
+    release_tag: ros2-0.1.1
     ros_distro: foxy
     vcs_type: git
     vcs_uri: https://github.com/canlab-co/CLPE_G_NVP2650D_SDK.git
