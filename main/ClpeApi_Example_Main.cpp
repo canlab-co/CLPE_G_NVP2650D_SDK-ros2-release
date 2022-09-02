@@ -1,20 +1,3 @@
-/*
- * Copyright (C) 2022 Can-lab Corporation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
-*/
-
 /**************************************************
   This is the Example for CanLab CLPE Client API.  
 ***************************************************/
@@ -25,7 +8,6 @@
 #define CLPE_TEST_GET_MICOM_VERSION		(CLPE_TEST_GET_CAM_STATUS+1)
 #define CLPE_TEST_GET_XAVIER_VERSION	(CLPE_TEST_GET_CAM_STATUS+2)
 #define CLPE_TEST_GET_SDK_VERSION		(CLPE_TEST_GET_CAM_STATUS+3)
-#define CLPE_TEST_GET_EEPROM_DATA		(CLPE_TEST_GET_CAM_STATUS+4)
 #define CLPE_TEST_REQ_XAVIER_OFF		(CLPE_TEST_GET_CAM_STATUS+6)
 #define CLPE_TEST_CHECK_TIME_SYNC		(CLPE_TEST_REQ_XAVIER_OFF+1)
 #define CLPE_TEST_CHECK_PCI_CONNECT		(CLPE_TEST_REQ_XAVIER_OFF+2)
@@ -49,7 +31,7 @@ int Clpe_GetFrameExample(unsigned int inst, unsigned char* buffer, unsigned int 
 	return 0;
 }
   
-int main() 
+int main()
 {
 	int ret = 0;
 
@@ -79,6 +61,7 @@ int main()
 #else
 	ret = clpe_api.Clpe_Connection();
 #endif
+
 	/*********************************
 		< Error status >
 		  0 - no error
@@ -110,7 +93,6 @@ int main()
 		printf("%d. Get micom version \n", CLPE_TEST_GET_MICOM_VERSION);
 		printf("%d. Get xavier version  \n", CLPE_TEST_GET_XAVIER_VERSION);
 		printf("%d. Get SDK version  \n", CLPE_TEST_GET_SDK_VERSION);
-		printf("%d. Get EEPROM data  \n", CLPE_TEST_GET_EEPROM_DATA);
 		printf("%d. Xavier power off \n", CLPE_TEST_REQ_XAVIER_OFF);
 		printf("-------------------------------------( Check )-------------------------------------\n");
 		printf("%d. Check time sync \n", CLPE_TEST_CHECK_TIME_SYNC);
@@ -200,54 +182,6 @@ int main()
 			}
 
 			free(sdkVer);
-		}
-		if(selectNum == CLPE_TEST_GET_EEPROM_DATA) /* Get firmware version of xavier */
-		{
-			unsigned char *eepromData = (unsigned char*) malloc(107);
-			int camId;
-
-			while(1)
-			{
-				printf("Set camId to (0 ~ 3) : ");
-				scanf("%d", &camId);
-				printf("\n");
-
-				if((camId < 0) || (camId > 3))
-				{
-					printf("<::::: Error :::::> camId value available from 0 to 3 ! Try again\n");
-				}
-				else
-				{
-					break;
-				}
-			}
-
-			ret = clpe_api.Clpe_GetEepromData(camId, eepromData);
-
-			/*********************************
-				< Error status >
-				 0 - no error
-			**********************************/			
-			if(ret == 0)
-			{
-				printf("<::::: Result :::::> Eeprom data !! \n");				
-				for(int i = 0; i < 107; i++)
-				{
-					printf("[%02d]0x%x(%c)	", i, eepromData[i], eepromData[i]);
-					if(((i + 1) % 4) == 0)
-					{
-						printf("\n");
-					}
-						
-				}
-				printf("\n");
-			}
-			else
-			{
-				printf("<::::: Error :::::> Get Eeprom data error num [ %d ]\n\n", ret);
-			}
-
-			free(eepromData);
 		}
 		if(selectNum == CLPE_TEST_REQ_XAVIER_OFF) /* Set xavier power off */
 		{

@@ -1,20 +1,3 @@
-/*
- * Copyright (C) 2022 Can-lab Corporation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
-*/
-
 /********************************************************************
   This is the ClpeClientApi Class Header of CanLab CLPE Client API.  
 *********************************************************************/
@@ -40,7 +23,6 @@
 #define ERROR_GETSET_STOP			-7		// error - stop cam
 #define ERROR_INVALID_MCU_ID		-8		// error - invalid MCU ID
 #define ERROR_RESYNC_TIME		    -9		// error - time sync failed
-#define ERROR_INVALID_CAM_ID        -10     // error - invalid Camera ID
 
 #define ERROR_CONNECT_DRIVER		-1		// error - can not probe driver
 #define ERROR_CONNECT_NETWORK		-2		// error - can not find network
@@ -79,7 +61,6 @@ public:
 	int Clpe_GetXavierVersion(unsigned char* version_master);
     int Clpe_GetSDKVersion(unsigned char* version);
 	int Clpe_GetCamStatus(int *status);
-    int Clpe_GetEepromData(int camId, unsigned char* eepromData);
 
 	int Clpe_SetXavierPowerOff();
 
